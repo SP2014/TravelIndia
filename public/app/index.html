@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mon Application</title>
+
+	<base href='/'>
+
+
+	<link rel="stylesheet" href="/assets/css/style.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<script src="/assets/js/angular.min.js"></script>
+	<script src="/assets/js/angular-route.js"></script>
+	<script src="/assets/js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+	
+	<script src="/app/app.js"></script>
+	<script src="/app/app.routes.js"></script>
+	
+
+
+
+</head>
+<body ng-app="myapp"> <!-- ng-init="auth.message={req.message}"> -->
+	<div ng-view></div>
+</body>
+</html>
