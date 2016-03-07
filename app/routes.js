@@ -11,7 +11,7 @@ module.exports = function(app){
     
 
     //Redirects traffic over https
-    app.use(redirectSec);
+    //app.use(redirectSec);
     
 
     //CATCH-ALL ROUTE
@@ -22,7 +22,7 @@ module.exports = function(app){
     //});
 
     app.get('/',function(req,res){
-       res.render('index.ejs');
+       res.render('addSpot.ejs');
     });
 
 
@@ -30,11 +30,11 @@ module.exports = function(app){
 
 //Function used to redirect traffic over https
 
-function redirectSec(req, res, next) {
+/*function redirectSec(req, res, next) {
     if (req.headers['x-forwarded-proto'] == 'http') { 
         res.redirect('https://' + req.headers.host + req.path);
     } else {
         return next();
     }
-}
+}*/
 
