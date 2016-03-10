@@ -19,12 +19,12 @@ module.exports = function(app,cloudinary, fs){
        res.render('test.ejs');
     });
 
-
+    /**
+     * Adding a new Spot
+     */
     app.post('/addspot',function(req,res){
         console.log(req.body);
         var spot = req.body;
-
-
         var spotob = new spots({
             loc_name:spot.spot,
             loc_fullname:spot.fullname,
@@ -50,14 +50,18 @@ module.exports = function(app,cloudinary, fs){
             //res.json({success : true});
             res.send('success');
         });
-
-
-
-
-        //res.send('success');
     });
 
+    app.get('/api/spots', function(req,res){
+        if(req.params.accessKey == 'travelIndia')
+        spots.find({}, function (err, spots) {
+            res.json(spots);
+        });
 
+        else{
+            res.json({error:'Invalid access'});
+        }
+    });
 
     //apiRoutes.get('/emails', emailRoutes.getAllEmails);
     //apiRoutes.post('/addemail', emailRoutes.addEmail);

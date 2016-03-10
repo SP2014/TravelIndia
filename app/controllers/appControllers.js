@@ -1,6 +1,9 @@
 var appControllers = angular.module('appControllers',[]);
 
 
+/**
+ * Common Controller for pages
+ */
 appControllers.controller('common',function($scope, $route,$rootScope){
     $rootScope.pageTitle = 'Travel India';
     $scope.menuItems = [
@@ -26,10 +29,16 @@ appControllers.controller('common',function($scope, $route,$rootScope){
     };
 });
 
+/**
+ * Controller for Dashboard
+ */
 appControllers.controller('console',function($scope, $route,$rootScope){
     $rootScope.pageTitle = $route.current.title;
 });
 
+/**
+ * Controller for Add Spot Page
+ */
 appControllers.controller('addSpotController',function($scope,$route,$rootScope,$timeout,geoComplete,$mdSidenav,$q, $mdToast,navService,$http,$geolocation,Upload, cloudinary) {
     $rootScope.pageTitle = $route.current.title;
     $scope.Data = {};
@@ -201,11 +210,9 @@ appControllers.controller('addSpotController',function($scope,$route,$rootScope,
      */
     $scope.setName = function(name){
         $scope.contentText.content = name;
-        console.log($scope.contentText);
+        //console.log($scope.contentText);
 
         if(count==0) {
-            //$scope.displayedForms.push(forms[0]);
-            //$scope.dispWindow = forms[0];
             $scope.displayedForms.push(forms[0]);
             count = 1;
         }
