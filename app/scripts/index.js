@@ -3,10 +3,35 @@
  */
 (function(){
     'use strict';
+    var travelIndia = angular.module('myApp',['ngAnimate', 'ngMaterial', 'GoogleMapsNative', 'angularTrix','geocomplete' ,'app',
+                   'ngGeolocation','ngFileUpload', 'ngRoute', 'cloudinary']);
 
-    angular.module('myApp',['ngAnimate', 'ngMaterial', 'ngMap', 'angularTrix', 'app'])
 
-        .config(function ($mdThemingProvider, $mdIconProvider){
+        travelIndia.config(function ($mdThemingProvider, $mdIconProvider, $routeProvider){
+
+            $routeProvider.when('/photos', {
+                templateUrl: '/partials/photo-list.html',
+                resolve: {
+                    photoList: function ($q, $rootScope, album) {
+                        if (!$rootScope.serviceCalled) {
+                            return album.photos({}, function (v) {
+                                $rootScope.serviceCalled = true;
+                                $rootScope.photos = v.resources;
+                            });
+                        } else {
+                            return $q.when(true);
+                        }
+                    }
+                }
+            }).when('/photos/new', {
+                templateUrl: '/partials/photo-upload.html',
+                controller: 'photoUploadCtrl'
+            }).otherwise({
+                redirectTo: '/photos'
+            });
+
+
+
             $mdThemingProvider
                 .theme('default')
                 .primaryPalette('grey', {
@@ -57,6 +82,9 @@
                 .icon("city"    , "../assets/svg/city.svg"     ,48)
                 .icon("place"    , "../assets/svg/place.svg"     ,48)
                 .icon("state"    , "../assets/svg/black.svg"     ,48)
+                .icon("zip"    , "../assets/svg/zip.svg"     ,48)
+                .icon("select"    , "../assets/svg/interface.svg"     ,48)
+                .icon("remove"    , "../assets/svg/remove.svg"     ,48)
                 .icon("notification","../assets/svg/notifications.svg",48)
                 .icon("google_plus", "assets/svg/google_plus.svg" , 512)
                 .icon("hangouts"   , "assets/svg/hangouts.svg"    , 512)
