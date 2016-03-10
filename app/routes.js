@@ -12,7 +12,7 @@ module.exports = function(app,cloudinary, fs){
 
 
     app.get('/',function(req,res){
-       res.render('addSpot.ejs');
+       res.render('index.ejs');
     });
 
     app.get('/test',function(req,res){

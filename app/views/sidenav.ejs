@@ -1,0 +1,22 @@
+<md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2"
+            md-component-id="left"
+            ng-click="toggleItemsList()" aria-label="Show User List"
+            md-is-locked-open="$mdMedia('gt-sm')" style="width: 120px">
+
+    <md-toolbar md-theme="custom" class="md-hue-1 md-whiteframe-z1">
+        <md-button layout="row" layout-align="center center" class="md-toolbar-tools md-warn"
+                   href="#/">
+            <h1>TI</h1>
+        </md-button>
+    </md-toolbar>
+
+    <md-list>
+        <md-list-item ng-repeat="it in menuItems">
+            <md-button ng-href="{{it.link}}" layout="row" layout-align="center center" flex style="padding-top: 15px">
+                <md-icon md-svg-icon="{{it.icon}}" class="avatar"></md-icon>
+                <p style="margin-top: -5px;">{{it.title}}</p>
+            </md-button>
+        </md-list-item>
+    </md-list>
+
+</md-sidenav>

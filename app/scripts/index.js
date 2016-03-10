@@ -3,31 +3,24 @@
  */
 (function(){
     'use strict';
-    var travelIndia = angular.module('myApp',['ngAnimate', 'ngMaterial', 'GoogleMapsNative', 'angularTrix','geocomplete' ,'app',
-                   'ngGeolocation','ngFileUpload', 'ngRoute', 'cloudinary']);
+    angular.module('myApp',['ngAnimate', 'ngMaterial', 'GoogleMapsNative', 'angularTrix','geocomplete' ,'app',
+                   'ngGeolocation','ngFileUpload', 'ngRoute', 'cloudinary', 'appControllers']).
+        config(function ($mdThemingProvider, $mdIconProvider, $routeProvider){
 
-
-        travelIndia.config(function ($mdThemingProvider, $mdIconProvider, $routeProvider){
-
-            $routeProvider.when('/photos', {
-                templateUrl: '/partials/photo-list.html',
-                resolve: {
-                    photoList: function ($q, $rootScope, album) {
-                        if (!$rootScope.serviceCalled) {
-                            return album.photos({}, function (v) {
-                                $rootScope.serviceCalled = true;
-                                $rootScope.photos = v.resources;
-                            });
-                        } else {
-                            return $q.when(true);
-                        }
-                    }
-                }
-            }).when('/photos/new', {
-                templateUrl: '/partials/photo-upload.html',
-                controller: 'photoUploadCtrl'
+            $routeProvider.when('/', {
+                templateUrl: '/views/partials/console.htm',
+                controller: 'console',
+                title: 'Travel India - Console'
+            }).when('/add', {
+                templateUrl: '/views/partials/addSpot.htm',
+                controller: 'addSpotController',
+                title: 'Travel India - Add Spot'
+                //controller: 'photoUploadCtrl'
+            }).when('/view',{
+                templateUrl: '/views/partials/viewSpot.htm',
+                title: 'Travel India - View'
             }).otherwise({
-                redirectTo: '/photos'
+                redirectTo: '/'
             });
 
 
@@ -86,9 +79,8 @@
                 .icon("select"    , "../assets/svg/interface.svg"     ,48)
                 .icon("remove"    , "../assets/svg/remove.svg"     ,48)
                 .icon("notification","../assets/svg/notifications.svg",48)
-                .icon("google_plus", "assets/svg/google_plus.svg" , 512)
-                .icon("hangouts"   , "assets/svg/hangouts.svg"    , 512)
-                .icon("twitter"    , "assets/svg/twitter.svg"     , 512)
-                .icon("phone"      , "assets/svg/phone.svg"       , 512);
+                .icon("dash"        ,"../assets/svg/tool.svg"         ,512)
+                .icon("view"        ,"../assets/svg/web.svg"         ,512)
+                .icon("add"        ,"../assets/svg/pin.svg"         ,512);
         });
 })();

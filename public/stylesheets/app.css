@@ -19,11 +19,11 @@ md-toolbar h3 {
 md-list-item > button {
   width:100%;
   text-align:left !important;
-  height:70px;;
 }
 
 md-icon.avatar {
   margin-right: 20px;
+  font-size: 30px;
 }
 
   md-list .md-button.selected {

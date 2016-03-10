@@ -1,0 +1,153 @@
+<div layout="row" layout-padding layout-wrap layout-fill>
+    <md-whiteframe class="md-whiteframe-1dp" layout-fill style="padding: 0;">
+        <div layout="row" layout-xs="column">
+            <div flex-gt-sm="60" style="background: #ebebeb;">
+                <md-toolbar>
+                    <div class="md-toolbar-tools">
+                        <md-button class="md-icon-button" aria-label="Add">
+                            <md-icon md-svg-icon="add"></md-icon>
+                        </md-button>
+                        <h2>
+                            <span>{{ headerTitle }}</span>
+                        </h2>
+                        <span flex></span>
+                    </div>
+                </md-toolbar>
+
+
+                <md-content md-scroll-y layout-padding style="max-height: 490px;">
+                    <form name="addForm">
+                        <div layout="row" style="margin-bottom: 10px">
+                            <md-autocomplete flex
+                                             ng-disabled="uploading"
+                                             ng-model="Data.spot"
+                                             md-input-name="addressField"
+                                             md-no-cache="noCache"
+                                             md-selected-item="selectedItem"
+                                             md-search-text="searchText"
+                                             md-items="item in querySearch(searchText)"
+                                             md-item-text="setName(item)"
+                                             md-min-length="0"
+                                             placeholder="Spot Name"
+                                             ng-keydown="removeTagOnBackspace($event)">
+                                <md-item-template>
+                                    <span md-highlight-text="searchText">{{item}}</span>
+                                </md-item-template>
+                            </md-autocomplete>
+                        </div>
+                        <div layout="row">
+                            <md-switch ng-disabled="uploading" ng-model="edit" ng-change="onChange(edit)" aria-label="Choice" ng-show="disp" ng-cloak>
+                                Edit the above name
+                            </md-switch>
+                        </div>
+                        <div layout-gt-sm="row">
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>City</label>
+                                <md-icon md-svg-icon="city" class="name"></md-icon>
+                                <input ng-disabled="uploading" ng-model="Data.city" ng-cloak>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>State</label>
+                                <md-icon md-svg-icon="state" class="name"></md-icon>
+                                <input ng-disabled="uploading" ng-model="Data.state" ng-cloak>
+                            </md-input-container>
+                            <md-input-container class="md-block" flex-gt-sm>
+                                <label>Zipcode</label>
+                                <md-icon md-svg-icon="zip" class="name"></md-icon>
+                                <input ng-disabled="uploading" ng-model="Data.zip" ng-cloak>
+                            </md-input-container>
+                        </div>
+                        <md-input-container class="md-block" flex-gt-xs  style="margin-top: -10px">
+                            <label>Co-ordinates</label>
+                            <md-icon md-svg-icon="place" class="name"></md-icon>
+                            <input ng-model="Data.coordinates"  disabled="true" ng-cloak>
+                        </md-input-container>
+
+                        <div layout="column" style="margin-top: -15px">
+                            <label>Description and History</label>
+                            <trix-editor ng-disabled="uploading" angular-trix ng-model="Data.description"></trix-editor>
+                        </div>
+
+                        <div layout="row" style="margin-top: 10px">
+                            <md-chips
+                                    ng-disabled="uploading"
+                                    ng-model="Data.tags"
+                                    readonly="ctrl.readonly"
+                                    placeholder="Categories"
+                                    delete-button-label="Remove Tag"
+                                    delete-hint="Press delete to remove tag"
+                                    secondary-placeholder="+Categories"
+                                    flex>
+                            </md-chips>
+                        </div>
+
+                        <div layout="column" style="margin-top: 15px">
+                            <md-whiteframe ng-disabled="uploading" class="md-whiteframe-1dp" flex ng-show="imgDisp" style="padding:16px;margin-bottom: 10px" ng-cloak>
+
+                                <div class="effects" ng-repeat="datas in imgData" ng-cloak >
+
+                                    <md-card style="width: 150px;float:left;margin-right: 5px;">
+                                        <div class="imgBox">
+                                            <img ngf-src="datas.file.result.url || datas.file" class="md-card-image" alt="Washed Out" style="width: 150px;height: 200px;">
+                                            <div class="overlay">
+                                                <!--a href="#" class="expand">-</a-->
+                                                <md-button class="md-fab md-mini expand" aria-label="Remove" ng-click="remove($index)">
+                                                    <md-icon md-svg-icon="remove"></md-icon>
+                                                </md-button>
+                                            </div>
+                                        </div>
+                                        <md-card-actions layout="row" flex>
+                                            <md-progress-linear ng-show="datas.showProgress" md-mode="determinate" value="{{datas.progress}}"></md-progress-linear>
+                                            <!--md-progress-linear md-mode="indeterminate" ng-show="datas.showProgress"></md-progress-linear-->
+                                            <label ng-hide="datas.showProgress" style="margin-left: auto;margin-right: auto; display: block">{{ datas.file.name }}</label>
+                                        </md-card-actions>
+                                    </md-card>
+                                </div>
+                            </md-whiteframe>
+
+
+                            <md-whiteframe class="mat-input-box" flex>
+                                <div href="#" ng-disabled="uploading" ng-model="files" ngf-multiple="true" ngf-select="uploadFiles($files)" multiple title="upload" class="fileName" flex>
+                                    <label ng-cloak>{{ imgTitle }}</label>
+                                </div>
+                                <md-button ng-disabled="uploading" class="md-raised md-warn" href="#" ng-model="files" ngf-multiple="true" ngf-select="uploadFiles($files)" multiple title="upload">
+                                    <md-icon md-svg-icon="select" style="color: #ebebeb"></md-icon>
+                                    &nbsp;Select</md-button>
+                            </md-whiteframe>
+
+                            <md-switch ng-disabled="uploading" ng-model="auto" ng-change="" aria-label="Choice" ng-cloak>
+                                Auto Upload
+                            </md-switch>
+
+                        </div>
+
+                        <div layout="row" layout-sm="column" layout-align="end" layout-wrap style="margin-top: 10px; margin-bottom: -5px">
+                            <md-button ng-disabled="uploading" class="md-raised" ng-click="api01.removeAll();clear();">Clear</md-button>
+                            <md-button ng-disabled="uploading" class="md-raised md-primary" ng-click="save()">Save</md-button>
+                        </div>
+
+                    </form>
+                </md-content>
+            </div>
+
+            <div flex-gt-sm="40" style="background: #006699;">
+                <gm-map
+                        center="data.center"
+                        zoom="data.zoom"
+                        options="{center: [37.772323, -122.214897], zoom: 5, mapTypeId: google.maps.MapTypeId.ROADMAP}"
+                        on-zoom-changed="data.zoom = map.getZoom()"
+                        on-center-changed="data.center = map.getCenter()"
+                        on-click="data.click = event.latLng">
+
+                    <gm-marker gm-address="address" gm-then="map.setCenter(marker.getPosition())" options="{draggable: true}" on-dragend="align(map, marker)"
+                               on-position_changed="align(map, marker)">
+                        <div ng-repeat="form in displayedForms track by $index"-->
+                            <ng-include src="form" id="iWindow"></ng-include>
+                        </div>
+                    </gm-marker>
+
+                </gm-map>
+            </div>
+        </div>
+    </md-whiteframe>
+</div>
