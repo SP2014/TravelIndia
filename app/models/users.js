@@ -5,9 +5,6 @@ module.exports = mongoose.model('Users', new Schema({
 	uname : String,
 	password : String,
 	email : String,
-	fbid : String,
-	googleid : String,
-	isfbloggedin : Boolean,
-	isgoogleloggedin : Boolean,
-	timestamp: {type:Date, default:Date.now}
+	timestamp: {type:Date, default:Date.now},
+	token: String
 }));

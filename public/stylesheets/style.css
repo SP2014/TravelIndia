@@ -126,3 +126,8 @@ gm-streetviewpanorama {
 a.md-button.md-warn.md-raised{
   color: #ebebeb;
 }
+
+.thumb{
+  float:left;
+  margin-right: 16px;
+}

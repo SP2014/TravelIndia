@@ -464,5 +464,36 @@ appControllers.controller('addSpotController',function($scope,$route,$rootScope,
         );
     }
 
+
+});
+
+
+appControllers.controller('viewController', function($scope, $rootScope, $route, DataService){
+    $rootScope.pageTitle = $route.current.title;
+    $scope.spots = [];
+    $scope.showProgress = true;
+    $scope.fallBack = '/assets/images/fallpack.png';
+
+    $scope.$watch(
+        function watchFoo( scope ) {
+            return( $scope.spots.length );
+        },
+        function handleFooChange( newValue, oldValue ) {
+            console.log( "new:", newValue );
+             if(newValue > 0){
+                 $scope.showProgress = false;
+             }
+        }
+    );
+
+
+    $scope.fetchContent = function () {
+        DataService.getData().then(function (result) {
+            $scope.spots = result.data;
+            console.log(result.data);
+        });
+    };
+
+    $scope.fetchContent();
 });
 

@@ -4,7 +4,7 @@
 (function(){
     'use strict';
     angular.module('myApp',['ngAnimate', 'ngMaterial', 'GoogleMapsNative', 'angularTrix','geocomplete' ,'app',
-                   'ngGeolocation','ngFileUpload', 'ngRoute', 'cloudinary', 'appControllers']).
+                   'ngGeolocation','ngFileUpload', 'ngRoute', 'cloudinary', 'appControllers', 'dcbImgFallback']).
         config(function ($mdThemingProvider, $mdIconProvider, $routeProvider){
 
             $routeProvider.when('/', {
@@ -18,6 +18,7 @@
                 //controller: 'photoUploadCtrl'
             }).when('/view',{
                 templateUrl: '/views/partials/viewSpot.htm',
+                controller: 'viewController',
                 title: 'Travel India - View'
             }).otherwise({
                 redirectTo: '/'
@@ -27,13 +28,16 @@
 
             $mdThemingProvider
                 .theme('default')
-                .primaryPalette('grey', {
-                    'default': '600'
+                .primaryPalette('blue-grey', {
+                    'default': '500'
                 })
                 .accentPalette('teal', {
                     'default': '500'
                 })
-                .warnPalette('defaultPrimary');
+                .warnPalette('defaultPrimary')
+                .backgroundPalette('grey', {
+                    'default': '50'
+                });
 
             $mdThemingProvider.theme('dark', 'default')
                 .primaryPalette('defaultPrimary')
@@ -83,4 +87,14 @@
                 .icon("view"        ,"../assets/svg/web.svg"         ,512)
                 .icon("add"        ,"../assets/svg/pin.svg"         ,512);
         });
+        /*.factory('DataService', function ($http) {
+        var getData = function () {
+            return $http.get('http://travelindia-teamshifter.rhcloud.com/api/spots' + 'content.json');
+        };
+
+        return {
+            getData: getData
+        };
+    });*/
+
 })();

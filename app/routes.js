@@ -2,9 +2,23 @@ var path = require('path');
 var jwt = require('jsonwebtoken');
 var config = require('../config/config');
 var spots = require('./models/spots');
+var user = require('./models/users');
+var passport = require('passport');
+var Strategy = require('passport-http-bearer').Strategy;
+
 
 
 module.exports = function(app,cloudinary, fs){
+
+    passport.use(new Strategy(
+        function(token, done) {
+           user.findOne({token: token},function(err, user){
+
+               if (err) {return done(err);}
+               if (!user) { return done(null, false); }
+               return done(null, user, { scope: 'read' });
+           });
+        }));
 
 //===========================
 //========MIDDLEWARE=========
@@ -17,6 +31,27 @@ module.exports = function(app,cloudinary, fs){
 
     app.get('/test',function(req,res){
        res.render('test.ejs');
+    });
+
+
+    app.post('/addUser',function(req,res){
+        var userob = new user({
+          uname: 'User1',
+          password: 'abc12345',
+          email: 'abc@xyz.com',
+          timestamp: ''+  new Date(new Date().getTime()).toDateString(),
+          token: '123456789'
+        });
+
+        userob.save(function (err) {
+            if(err){
+                throw err;
+                res.send('error');
+            }
+            console.log("User saved successfully");
+            //res.json({success : true});
+            res.send('success');
+        })
     });
 
     /**
@@ -52,15 +87,11 @@ module.exports = function(app,cloudinary, fs){
         });
     });
 
-    app.get('/api/spots', function(req,res){
-        if(req.params.accessKey == 'travelIndia')
-        spots.find({}, function (err, spots) {
-            res.json(spots);
-        });
-
-        else{
-            res.json({error:'Invalid access'});
-        }
+    app.get('/api/spots', passport.authenticate('bearer', { session: false }),function(req,res) {
+        console.log(req.headers);
+            spots.find({}, function (err, spots) {
+                res.json(spots);
+            });
     });
 
     //apiRoutes.get('/emails', emailRoutes.getAllEmails);

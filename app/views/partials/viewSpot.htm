@@ -1,0 +1,37 @@
+<div layout="row" layout-wrap layout-padding layout-fill>
+  <md-card style="background: #ffffff;padding:0" flex>
+      <!--md-progress-linear md-mode="indeterminate" ng-show="showProgress"></md-progress-linear-->
+      <div layout="row" layout-sm="column" layout-align="space-around">
+          <md-progress-circular md-mode="indeterminate" ng-show="showProgress"></md-progress-circular>
+      </div>
+      <div ng-show="!showProgress" ng-repeat="spot in spots">
+              <div  layout="row" layout-fill style="padding:8px;">
+                  <div class="thumb">
+                      <img ng-src="http://res.cloudinary.com/travelindia/image/upload/v1457790782/{{ spot.media[0] }}.jpg" loading-src fallback-src="{{ fallBack }}" alt="Spot Img" style="width: 50px; height: 50px;"/>
+                  </div>
+                  <div class="content">
+                    <span>{{ spot.loc_name }}</span>
+                  </div>
+              </div>
+          <md-divider ng-if="!$last"></md-divider>
+      </div>
+      <md-toolbar>
+          <div class="md-toolbar-tools">
+              <md-button class="md-icon-button" aria-label="Settings">
+                  <md-icon md-svg-icon="img/icons/menu.svg"></md-icon>
+              </md-button>
+              <h2>
+                  <span>Toolbar with Icon Buttons</span>
+              </h2>
+              <span flex></span>
+              <md-button class="md-icon-button" aria-label="Favorite">
+                  <md-icon md-svg-icon="img/icons/favorite.svg" style="color: greenyellow;"></md-icon>
+              </md-button>
+              <md-button class="md-icon-button" aria-label="More">
+                  <md-icon md-svg-icon="img/icons/more_vert.svg"></md-icon>
+              </md-button>
+          </div>
+      </md-toolbar>
+
+  </md-card>
+</div>
