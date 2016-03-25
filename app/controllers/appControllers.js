@@ -189,15 +189,20 @@ appControllers.controller('addSpotController',function($scope,$route,$rootScope,
      */
     $scope.querySearch = function(query){
         $scope.address = '';
-        $scope.address = query;
-
+        
+        //console.log(edit_condition); 
         if(edit_condition == 0) {
+            $scope.address = query;
             geoComplete.cities(query).then(function (cities) {
                 $scope.spots = cities;
             });
             var results = query ? $scope.spots : [];
             console.log(results);
             return results;
+        }
+        else{
+            $scope.Data.fullname = query;
+            $scope.Data.spot = query;
         }
 
     };
@@ -240,6 +245,7 @@ appControllers.controller('addSpotController',function($scope,$route,$rootScope,
     $scope.removeTagOnBackspace = function (event) {
         if (event.keyCode === 8) {
             //$scope.dispWindow = null;
+            if(edit_condition == 0)
             $scope.displayedForms.splice(0,1);
             count = 0;
         }
