@@ -34,6 +34,29 @@ appControllers.controller('common',function($scope, $route,$rootScope){
  */
 appControllers.controller('console',function($scope, $route,$rootScope){
     $rootScope.pageTitle = $route.current.title;
+
+    $scope.calculate = function(){
+
+        var point1 = $scope.p1.split(',');
+        var point2 = $scope.p2.split(',');
+
+        var R = 6371000;
+        var a1 = point1[0] * Math.PI / 180;
+        var a2 = point2[0] * Math.PI / 180;
+
+        var b1 = (point2[0] - point1[0]) * Math.PI / 180;
+        var b2 = (point2[1] - point1[1]) * Math.PI / 180;
+
+        var c = Math.sin(b1/2) * Math.sin(b1/2) + Math.cos(a1) * Math.cos(a2) * Math.sin(b2/2) * Math.sin(b2/2);
+        var e = 2 * Math.atan2(Math.sqrt(c),Math.sqrt(1-c));
+        $scope.distance = ((R * e)/1000)-1;
+
+        var w1 = a1, w2 = a2, f = b2;
+        var di = Math.acos( Math.sin(w1)*Math.sin(w2) + Math.cos(w1)*Math.cos(w2) * Math.cos(f) ) * R;
+
+        //$scope.distance = di;
+
+    }
 });
 
 /**

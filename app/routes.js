@@ -87,11 +87,57 @@ module.exports = function(app,cloudinary, fs){
         });
     });
 
-    app.get('/api/spots', passport.authenticate('bearer', { session: false }),function(req,res) {
-        console.log(req.headers);
+
+
+
+    //app.get('/api/spots', passport.authenticate('bearer', { session: false }),function(req,res) {
+    //    console.log(req.headers);
+    //        spots.find({}, function (err, spots) {
+    //            res.json(spots);
+    //        });
+    //});
+
+    app.get('/api/spots', function(req,res) {
+        //console.log(req.param('location'));
+        var location = req.param('location').toLowerCase();
+        var point = req.param('point');
+        var distance = req.param('distance');
+        var limit = req.param('limit');
+
+        var results = [];
+
+        if(location == null || location == undefined) {
             spots.find({}, function (err, spots) {
                 res.json(spots);
             });
+        }
+        else{
+
+            spots.find({'loc_city':location} , function(err, spot){
+               spot.forEach(function(record){
+                  //console.log(record.loc_name);
+                   //Distance Calculation Function
+                   var point1 = point.split(',');
+                   var point2 = record.loc_coordinates.split(',');
+                   //console.log(point1[])
+                   var R = 6371000;
+                   var a1 = point1[0] * Math.PI / 180;
+                   var a2 = point2[0] * Math.PI / 180;
+                   var b1 = (point2[0] - point1[0]) * Math.PI / 180;
+                   var b2 = (point2[1] - point1[1]) * Math.PI / 180;
+                   var c = Math.sin(b1/2) * Math.sin(b1/2) + Math.cos(a1) * Math.cos(a2) * Math.sin(b2/2) * Math.sin(b2/2);
+                   var e = 2 * Math.atan2(Math.sqrt(c),Math.sqrt(1-c));
+                   var dis = ((R * e)/1000)-1;
+                   console.log(dis);
+                   //Check if distance within the range
+                   if(dis <= distance)
+                    results.push(record);
+               });
+
+                res.json(results);
+            });
+
+        }
     });
 
     //apiRoutes.get('/emails', emailRoutes.getAllEmails);

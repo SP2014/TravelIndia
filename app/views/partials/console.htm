@@ -2,3 +2,18 @@
     <md-button ng-href="#view" class="md-raised">View</md-button>
     <md-button ng-href="#add" class="md-raised primary">Add</md-button>
 </div>
+<br/>
+<div layout="row" layout-padding layout-wrap layout-fill>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Point1</label>
+        <input type="text" ng-model="p1">
+    </md-input-container>
+    <br/>
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Point2</label>
+        <input type="text" ng-model="p2">
+    </md-input-container>
+    <md-button class="md-raised primary" ng-click="calculate()">Calculate</md-button>
+    <br/>
+    <p>Distance: {{distance}} km</p>
+</div>
