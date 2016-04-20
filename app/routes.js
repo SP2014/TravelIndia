@@ -4,6 +4,9 @@ var config = require('../config/config');
 var spots = require('./models/spots');
 var user = require('./models/users');
 var passport = require('passport');
+var client = require('http');
+var gmapUtil = require('googlemapsutil');
+var distanceMatrix = require('google-distance-matrix');
 var Strategy = require('passport-http-bearer').Strategy;
 
 
@@ -19,6 +22,16 @@ module.exports = function(app,cloudinary, fs){
                return done(null, user, { scope: 'read' });
            });
         }));
+
+
+    //========== Parser Function ===============//
+// call api from class object
+    var cb = function(err, result) {
+        if (err) {
+            console.log(err);
+        }
+        console.log(result);
+    };
 
 //===========================
 //========MIDDLEWARE=========
@@ -98,14 +111,17 @@ module.exports = function(app,cloudinary, fs){
     //});
 
     app.get('/api/spots', function(req,res) {
-        //console.log(req.param('location'));
-        var location = req.param('location').toLowerCase();
-        var point = req.param('point');
-        var distance = req.param('distance');
-        var limit = req.param('limit');
-
+        if(req.param('location')!=null) {
+            var location = req.param('location').toLowerCase();
+            var point = req.param('point');
+            var maxDistance = req.param('distance');
+            var limit = req.param('limit');
+        }
         var results = [];
-
+        var coords = [];
+        var disMatrix = [];
+        var responses = [];
+        //var distances = [];
         if(location == null || location == undefined) {
             spots.find({}, function (err, spots) {
                 res.json(spots);
@@ -114,31 +130,46 @@ module.exports = function(app,cloudinary, fs){
         else{
 
             spots.find({'loc_city':location} , function(err, spot){
-               spot.forEach(function(record){
-                  //console.log(record.loc_name);
-                   //Distance Calculation Function
-                   var point1 = point.split(',');
-                   var point2 = record.loc_coordinates.split(',');
-                   //console.log(point1[])
-                   var R = 6371000;
-                   var a1 = point1[0] * Math.PI / 180;
-                   var a2 = point2[0] * Math.PI / 180;
-                   var b1 = (point2[0] - point1[0]) * Math.PI / 180;
-                   var b2 = (point2[1] - point1[1]) * Math.PI / 180;
-                   var c = Math.sin(b1/2) * Math.sin(b1/2) + Math.cos(a1) * Math.cos(a2) * Math.sin(b2/2) * Math.sin(b2/2);
-                   var e = 2 * Math.atan2(Math.sqrt(c),Math.sqrt(1-c));
-                   var dis = ((R * e)/1000)-1;
-                   console.log(dis);
-                   //Check if distance within the range
-                   if(dis <= distance)
-                    results.push(record);
-               });
+                if(point!=null || point!=undefined) {
+                    spot.forEach(function (record) {
+                        var po = record.loc_coordinates.split(',');
+                        record.loc_coordinates = parseFloat(po[0]).toFixed(3)+','+parseFloat(po[1]).toFixed(3);
+                        results.push(record);
+                        coords.push(record.loc_coordinates);
+                    });
 
-                res.json(results);
+
+                    foo(coords, function(r){
+                        r.elements.forEach(function(p,i){
+                            var pp = p.distance.text.split(' ');
+                            console.log(parseFloat(pp[0]));
+                            if(pp[1]=='km' && parseFloat(pp[0])<= parseFloat(maxDistance)){
+                                responses.push(destinations[i]);
+                                disMatrix.push(p.distance.text);
+                            }
+                        });
+
+                        var dis = {'distance':disMatrix};
+                        responses.push(dis);
+                        res.json(responses);
+                    });
+                }
+
+                function foo(address, fn){
+                    gmapUtil.distancematrix(point, address, {mode: 'street', language: 'en-EN'}, function(err, result){
+                        if (err) {
+                            console.log(err);
+                        }
+                        var par = JSON.parse(result);
+                        fn(par.rows[0]);
+                    });
+                }
+
             });
-
         }
     });
+
+
 
     //apiRoutes.get('/emails', emailRoutes.getAllEmails);
     //apiRoutes.post('/addemail', emailRoutes.addEmail);
